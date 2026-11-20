@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>재천학능력시험</title>
+
+<style>
+:root {
+  --navy: #17233c;
+  --blue: #34496b;
+  --bg: #f1f3f6;
+  --border: #dce1e8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #20242b;
+  font-family: "Malgun Gothic", Arial, sans-serif;
+}
+
+header {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 18px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+nav {
+  display: flex;
+  gap: 15px;
+}
+
+nav button {
+  border: 0;
+  background: transparent;
+  color: var(--navy);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+main {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 18px;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 35px;
+  margin-bottom: 20px;
+}
+
+.center { text-align: center; }
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #65758d;
+}
+
+h1 {
+  font-size: 36px;
+  color: var(--navy);
+  margin: 15px 0;
+}
+
+h2 { color: var(--navy); }
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+button {
+  font-family: inherit;
+}
+
+.primary {
+  background: var(--navy);
+  border: 0;
+  color: white;
+  padding: 14px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.secondary {
+  background: white;
+  border: 1px solid #a9b4c2;
+  color: var(--navy);
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+input[type=text], textarea {
+  font: inherit;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #cbd1db;
+  border-radius: 5px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.notice {
+  background: #f4f6fa;
+  padding: 17px;
+  border-radius: 6px;
+  line-height: 1.9;
+  color: #465267;
+}
+
+.exam-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  padding: 14px 20px;
+  background: white;
+  border-radius: 8px;
+}
+
+.timer {
+  color: #b42318;
+  font-weight: bold;
+}
+
+.paper {
+  background: white;
+  padding: 35px;
+  min-height: 650px;
+  border: 1px solid #c9cdd4;
+  box-shadow: 0 5px 25px #17233c10;
+}
+
+.paper-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.paper-title {
+  text-align: center;
+  border-bottom: 3px solid #222;
+  padding: 15px 0 22px;
+  margin-bottom: 26px;
+}
+
+.paper-title h2 {
+  color: #111;
+  font-size: 25px;
+  letter-spacing: 2px;
+}
+
+.paper-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 27px;
+}
+
+.paper-column + .paper-column {
+  border-left: 1px solid #d1d5db;
+  padding-left: 27px;
+}
+
+.question {
+  margin-bottom: 34px;
+  break-inside: avoid;
+}
+
+.question-title {
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.question small {
+  color: #7c8796;
+}
+
+.choice {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  line-height: 1.6;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.choice:hover {
+  background: #f0f3f8;
+}
+
+.audio-box {
+  border: 1px solid #dce1e8;
+  background: #f7f8fa;
+  padding: 13px;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+
+audio { width: 100%; }
+
+.page-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  gap: 10px;
+}
+
+.score {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.error-item {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+}
+
+.error-item p { line-height: 1.7; }
+
+.rank-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.rank-table th, .rank-table td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #e0e4eb;
+}
+
+.rank-table th {
+  background: #f3f5f8;
+}
+
+.warning {
+  color: #b42318;
+  font-weight: bold;
+}
+
+.muted { color: #777; }
+
+footer {
+  text-align: center;
+  color: #8992a0;
+  padding: 30px;
+  font-size: 12px;
+}
+
+@media(max-width: 700px) {
+  header { flex-direction: column; }
+  main { margin: 20px auto; }
+  .panel, .paper { padding: 20px; }
+  h1 { font-size: 27px; }
+
+  .paper-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .paper-column + .paper-column {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">재천학능력시험</div>
+  <nav>
+    <button onclick="goHome()">시험 안내</button>
+    <button onclick="showRanking()">실시간 순위표</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- 메인 화면 -->
+<section id="home" class="screen active">
+  <div class="panel center">
+    <p class="eyebrow">2027학년도 제1회</p>
+    <h1>재천학능력시험</h1>
+    <h2>임재천 탐구 영역</h2>
+    <p class="subtitle">
+      당신은 임재천에 대해 얼마나 알고 있습니까?
+    </p>
+
+    <div class="notice">
+      총 25문항<br>
+      재천어 듣기평가 5문항<br>
+      객관식 10문항<br>
+      서술형 10문항
+    </div>
+
+    <br>
+    <button class="primary" onclick="showScreen('register')">
+      시험 응시하기
+    </button>
+  </div>
+</section>
+
+<!-- 응시자 정보 -->
+<section id="register" class="screen">
+  <div class="panel">
+    <h2>응시자 정보</h2>
+    <p>시험에 사용할 성명을 입력하세요.</p>
+
+    <label for="studentName">성명</label>
+    <input id="studentName" type="text"
+           maxlength="30" placeholder="성명 입력">
+
+    <h3>시험 유의사항</h3>
+    <div class="notice">
+      1. 시험은 총 25문항으로 구성됩니다.<br>
+      2. 듣기평가에서는 재천님의 실제 음성을 사용합니다.<br>
+      3. 시험 도중 다른 화면으로 이동하면 이탈이 기록될 수 있습니다.<br>
+      4. 시험 문제와 답안은 최종 출제 후 적용됩니다.<br>
+      5. 성적 및 순위 기능은 추후 활성화됩니다.
+    </div>
+
+    <p>
+      <label>
+        <input type="checkbox" id="agree">
+        위 유의사항을 확인했습니다.
+      </label>
+    </p>
+
+    <button class="primary" onclick="startExam()">
+      시험 화면 입장
+    </button>
+  </div>
+</section>
+
+<!-- 시험 화면 -->
+<section id="exam" class="screen">
+
+  <div class="exam-toolbar">
+    <span>응시자: <b id="displayName"></b></span>
+    <span id="timer" class="timer">제한시간 미설정</span>
+    <span id="exitCount">화면 이탈 0회</span>
+  </div>
+
+  <div class="paper">
+    <div class="paper-top">
+      <span>2027학년도 제1회 재천학능력시험</span>
+      <span>임재천 탐구 영역</span>
+    </div>
+
+    <div class="paper-title">
+      <h2>임재천 탐구 영역</h2>
+      <p>성명: <span id="paperName"></span></p>
+    </div>
+
+    <div id="paperColumns" class="paper-columns"></div>
+
+    <div class="page-controls">
+      <button class="secondary" onclick="prevPage()">이전</button>
+      <span id="pageNumber"></span>
+      <button class="secondary" onclick="nextPage()">다음</button>
+    </div>
+  </div>
+
+  <div class="panel center">
+    <p id="answerProgress">응답한 문항: 0 / 25</p>
+    <button class="primary" onclick="submitExam()">
+      답안 제출
+    </button>
+  </div>
+</section>
+
+<!-- 제출 확인 -->
+<section id="result" class="screen">
+  <div class="panel center">
+    <h2>시험 결과</h2>
+    <p id="resultName"></p>
+
+    <p class="muted">현재는 시험지 미리보기 단계입니다.</p>
+    <p class="score" id="scoreText">채점 준비 중</p>
+
+    <p id="resultDescription">
+      문제와 정답이 확정되면 자동 채점이 활성화됩니다.
+    </p>
+
+    <button class="secondary" onclick="showScreen('review')">
+      제출 답안 확인
+    </button>
+
+    <button class="primary" onclick="showRanking()">
+      실시간 순위표
+    </button>
+  </div>
+</section>
+
+<!-- 답안 검토 -->
+<section id="review" class="screen">
+  <div class="panel">
+    <h2>답안 및 오답 확인</h2>
+    <p class="muted">
+      정답 데이터가 등록되면 이곳에서 오답과 해설을 확인할 수 있습니다.
+    </p>
+    <div id="reviewList"></div>
+
+    <br>
+    <button class="secondary" onclick="showScreen('result')">
+      성적표로 돌아가기
+    </button>
+  </div>
+</section>
+
+<!-- 실시간 순위표 -->
+<section id="ranking" class="screen">
+  <div class="panel">
+    <h2>🏆 재천학능력시험 실시간 순위표</h2>
+    <p id="rankingStatus" class="muted">
+      실시간 순위 데이터베이스 연결 대기 중
+    </p>
+
+    <table class="rank-table">
+      <thead>
+        <tr>
+          <th>순위</th>
+          <th>성명</th>
+          <th>점수</th>
+        </tr>
+      </thead>
+      <tbody id="rankingBody">
+        <tr>
+          <td colspan="3">아직 등록된 성적이 없습니다.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br>
+    <button class="secondary" onclick="goHome()">
+      메인으로 돌아가기
+    </button>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  2027 재천학능력시험 | 비공식 팬 제작 프로젝트
+</footer>
+
+<script>
+"use strict";
+
+/*
+  재천학능력시험 v1.0
+
+  현재 상태:
+  - 25문항 시험지 미리보기
+  - 듣기 5 / 객관식 10 / 서술형 10
+  - 성명 입력
+  - 화면 이탈 횟수 표시
+  - 답안 임시 저장
+
+  정식 시험 운영 전 필요한 작업:
+  - 문제와 정답 등록
+  - 제한시간과 배점 확정
+  - 서버 측 자동 채점 구현
+  - 실시간 순위표 DB 연결
+*/
+
+// 아직 시험 시간이 확정되지 않았으므로 null
+const EXAM_MINUTES = null;
+
+// 실제 시험이 준비되면 운영 설정을 변경
+const EXAM_OPEN = false;
+
+let studentName = "";
+let currentPage = 0;
+let exitCount = 0;
+let examStarted = false;
+let submitted = false;
+let answers = {};
+let timeRemaining = null;
+let timerInterval = null;
+
+// 문항 목록: 실제 문제 확정 후 교체
+const questions = Array.from({length: 25}, (_, index) => {
+  const id = index + 1;
+  const type = id <= 5
+    ? "audio"
+    : id <= 15
+      ? "choice"
+      : "text";
+
+  return {
+    id,
+    type,
+    title:
+      type === "audio"
+        ? "다음 음성을 듣고 재천님이 말한 표현을 고르시오."
+        : type === "choice"
+          ? "다음 중 임재천님과 관련된 설명으로 옳은 것은?"
+          : "다음 물음에 대한 답을 작성하시오.",
+    audio: "",
+    options: ["선택지 1", "선택지 2", "선택지 3",
+              "선택지 4", "선택지 5"],
+    ready: false
+  };
+});
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function goHome() {
+  if (examStarted && !submitted) {
+    const ok = confirm(
+      "시험 화면을 나가시겠습니까? 작성한 답안은 이 페이지를 열어둔 동안만 유지됩니다."
+    );
+    if (!ok) return;
+    exitCount++;
+  }
+  showScreen("home");
+}
+
+function showRanking() {
+  if (examStarted && !submitted) {
+    exitCount++;
+  }
+  updateExitCount();
+  showScreen("ranking");
+}
+
+function startExam() {
+  const input = document.getElementById("studentName");
+  const agree = document.getElementById("agree");
+
+  const name = input.value.trim();
+
+  if (!name) {
+    alert("성명을 입력해주세요.");
+    input.focus();
+    return;
+  }
+
+  if (!agree.checked) {
+    alert("시험 유의사항을 확인해주세요.");
+    return;
+  }
+
+  studentName = name;
+  examStarted = true;
+  submitted = false;
+  currentPage = 0;
+  exitCount = 0;
+  answers = {};
+
+  document.getElementById("displayName").textContent = name;
+  document.getElementById("paperName").textContent = name;
+
+  renderQuestions();
+  updateExitCount();
+  updateProgress();
+  startTimer();
+
+  showScreen("exam");
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+
+  const timerEl = document.getElementById("timer");
+
+  if (EXAM_MINUTES === null) {
+    timerEl.textContent = "제한시간 미설정";
+    return;
+  }
+
+  timeRemaining = EXAM_MINUTES * 60;
+
+  timerInterval = setInterval(() => {
+    if (!examStarted || submitted) {
+      clearInterval(timerInterval);
+      return;
+    }
+
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+
+    timerEl.textContent =
+      String(minutes).padStart(2, "0") + ":" +
+      String(seconds).padStart(2, "0");
+
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      submitExam(true);
+      return;
+    }
+
+    timeRemaining--;
+  }, 1000);
+}
+
+// 한 페이지에 최대 6문항
+const PAGE_SIZE = 6;
+
+function renderQuestions() {
+  const start = currentPage * PAGE_SIZE;
+  const currentQuestions = questions.slice(start, start + PAGE_SIZE);
+
+  const columns = document.getElementById("paperColumns");
+  columns.innerHTML = "";
+
+  const middle = Math.ceil(currentQuestions.length / 2);
+
+  const left = document.createElement("div");
+  left.className = "paper-column";
+
+  const right = document.createElement("div");
+  right.className = "paper-column";
+
+  currentQuestions.forEach((question, index) => {
+    const target = index < middle ? left : right;
+    target.appendChild(createQuestion(question));
+  });
+
+  columns.appendChild(left);
+  columns.appendChild(right);
+
+  const totalPages = Math.ceil(questions.length / PAGE_SIZE);
+
+  document.getElementById("pageNumber").textContent =
+    `${currentPage + 1} / ${totalPages} 페이지`;
+
+  updateProgress();
+}
+
+function createQuestion(question) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "question";
+
+  const heading = document.createElement("div");
+  heading.className = "question-title";
+  heading.textContent = `${question.id}. ${question.title}`;
+
+  wrapper.appendChild(heading);
+
+  const status = document.createElement("small");
+  status.textContent = "[출제 예정]";
+  wrapper.appendChild(status);
+
+  if (question.type === "audio") {
+    const audioBox = document.createElement("div");
+    audioBox.className = "audio-box";
+
+    if (question.audio) {
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.preload = "none";
+      audio.src = question.audio;
+      audioBox.appendChild(audio);
+    } else {
+      audioBox.textContent = "🔊 음성 파일 등록 예정";
+    }
+
+    wrapper.appendChild(audioBox);
+  }
+
+  if (question.type === "audio" || question.type === "choice") {
+    question.options.forEach((option, index) => {
+      const label = document.createElement("label");
+      label.className = "choice";
+
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = `q${question.id}`;
+      radio.value = String(index);
+      radio.checked = answers[question.id] === String(index);
+
+      radio.addEventListener("change", () => {
+        answers[question.id] = String(index);
+        updateProgress();
+      });
+
+      const content = document.createElement("span");
+      content.textContent =
+        ["①", "②", "③", "④", "⑤"][index] + " " + option;
+
+      label.appendChild(radio);
+      label.appendChild(content);
+      wrapper.appendChild(label);
+    });
+  } else {
+    const textarea = document.createElement("textarea");
+    textarea.placeholder = "답안을 작성하세요.";
+    textarea.value = answers[question.id] || "";
+
+    textarea.addEventListener("input", () => {
+      answers[question.id] = textarea.value;
+      updateProgress();
+    });
+
+    wrapper.appendChild(textarea);
+  }
+
+  return wrapper;
+}
+
+function nextPage() {
+  const maxPage = Math.ceil(questions.length / PAGE_SIZE) - 1;
+
+  if (currentPage < maxPage) {
+    currentPage++;
+    renderQuestions();
+    window.scrollTo(0, 0);
+  }
+}
+
+function prevPage() {
+  if (currentPage > 0) {
+    currentPage--;
+    renderQuestions();
+    window.scrollTo(0, 0);
+  }
+}
+
+function getAnsweredCount() {
+  return questions.filter(question => {
+    const answer = answers[question.id];
+    return answer !== undefined &&
+      String(answer).trim() !== "";
+  }).length;
+}
+
+function updateProgress() {
+  document.getElementById("answerProgress").textContent =
+    `응답한 문항: ${getAnsweredCount()} / 25`;
+}
+
+function updateExitCount() {
+  document.getElementById("exitCount").textContent =
+    `화면 이탈 ${exitCount}회`;
+}
+
+function submitExam(force = false) {
+  if (!force) {
+    const answered = getAnsweredCount();
+    const message =
+      `총 25문항 중 ${answered}문항에 응답했습니다.\n` +
+      "답안을 제출하시겠습니까?";
+
+    if (!confirm(message)) return;
+  }
+
+  submitted = true;
+  examStarted = false;
+
+  clearInterval(timerInterval);
+
+  document.getElementById("resultName").textContent =
+    `응시자: ${studentName}`;
+
+  if (EXAM_OPEN) {
+    // 정식 시험 운영 시에는 이곳에서
+    // 서버 측 채점 API를 호출해야 합니다.
+    document.getElementById("scoreText").textContent =
+      "채점 시스템 연결 대기";
+  } else {
+    document.getElementById("scoreText").textContent =
+      "채점 준비 중";
+  }
+
+  renderReview();
+  showScreen("result");
+}
+
+function renderReview() {
+  const container = document.getElementById("reviewList");
+  container.innerHTML = "";
+
+  questions.forEach(question => {
+    const item = document.createElement("div");
+    item.className = "error-item";
+
+    const title = document.createElement("strong");
+    title.textContent = `${question.id}번. ${question.title}`;
+
+    const answer = document.createElement("p");
+    const value = answers[question.id];
+
+    let display = "미응답";
+
+    if (value !== undefined && String(value).trim() !== "") {
+      if (question.type === "text") {
+        display = value;
+      } else {
+        display = question.options[Number(value)] || "미응답";
+      }
+    }
+
+    answer.textContent = `제출한 답: ${display}`;
+
+    const explanation = document.createElement("p");
+    explanation.className = "muted";
+    explanation.textContent = "정답 및 해설 등록 예정";
+
+    item.appendChild(title);
+    item.appendChild(answer);
+    item.appendChild(explanation);
+
+    container.appendChild(item);
+  });
+}
+
+// 탭을 숨기거나 브라우저를 최소화할 때 감지
+document.addEventListener("visibilitychange", () => {
+  if (!examStarted || submitted) return;
+
+  if (document.hidden) {
+    exitCount++;
+    updateExitCount();
+  }
+});
+
+// 실제 실시간 순위표는 서버 연결 후 구현
+// 정답과 순위는 브라우저만으로 신뢰성 있게
+// 관리할 수 없으므로 공개 코드에 저장하지 않습니다.
+
+</script>
+
+</body>
+</html>
