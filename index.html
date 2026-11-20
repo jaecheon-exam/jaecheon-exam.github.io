@@ -1,302 +1,172 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>재천학능력시험</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026학년도 임재천 4주년 평가 문제지 | 임재천학 능력 시험</title>
 
 <style>
-:root {
-  --navy: #17233c;
-  --blue: #34496b;
-  --bg: #f1f3f6;
-  --border: #dce1e8;
+*{box-sizing:border-box}
+body{margin:0;background:#e6e8ed;color:#171717;font-family:"Malgun Gothic",Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.4;cursor:default}
+nav{background:#fff;border-bottom:1px solid #ccc;padding:13px max(18px,calc((100vw - 1020px)/2));display:flex;justify-content:space-between;align-items:center;gap:12px}
+nav b{font-size:16px}
+nav button,.btn{border:1px solid #333;background:#fff;padding:10px 14px;border-radius:2px}
+.btn.dark{background:#212936;color:#fff}
+.wrap{max-width:1050px;margin:25px auto;padding:0 16px}
+.screen{display:none}
+.screen.active{display:block}
+.sheet{background:#fff;border:1px solid #c6c6c6;padding:34px;box-shadow:0 5px 16px #0000000c}
+.cover{max-width:780px;margin:auto;min-height:660px}
+.center{text-align:center}
+.small{font-size:12px;color:#555}
+.title{font-size:28px;letter-spacing:3px;margin:12px 0 5px}
+.rule{border:0;border-top:2px solid #171717;margin:17px 0}
+.instructions{margin:25px 0;line-height:2;border:1px solid #777;padding:16px 23px}
+.instructions li{margin-bottom:4px}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.input{border:1px solid #aaa;padding:10px;width:100%;max-width:380px}
+.toolbar{background:#fff;border:1px solid #ccc;padding:10px 18px;margin-bottom:13px;font-size:13px}
+.paper-heading{display:flex;justify-content:space-between;font-size:11px;border-bottom:2px solid #111;padding-bottom:9px}
+.paper-title{text-align:center;margin:14px 0 20px}
+.paper-title h2{font-size:22px;letter-spacing:4px;margin:6px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:24px;min-height:570px}
+.col+.col{border-left:1px solid #aaa;padding-left:24px}
+.question{margin-bottom:30px;break-inside:avoid}
+.question h3{font-size:14px;line-height:1.7;margin:0 0 10px}
+.opt{display:flex;gap:8px;padding:5px 0;font-size:13px;line-height:1.6;cursor:pointer}
+.opt input{accent-color:#222;flex-shrink:0}
+.answer{width:100%;min-height:90px;border:1px solid #888;padding:12px;line-height:1.7;resize:none}
+.audio{width:100%;margin:10px 0;max-height:48px}
+.pending{font-size:11px;color:#8b5a10}
+.footer-num{text-align:center;border-top:1px solid #111;padding-top:12px;margin-top:24px;font-size:12px}
+.controls{display:flex;justify-content:space-between;align-items:center;margin:16px 0;gap:8px}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #333;margin:24px 0}
+.result-grid>div{text-align:center;padding:20px 5px}
+.result-grid>div+div{border-left:1px solid #aaa}
+.result-grid strong{font-size:24px}
+.review{border-top:1px solid #aaa;padding:15px 0}
+.good{color:#187044}
+.bad{color:#b42318}
+.skip{color:#805814}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+table{border-collapse:collapse;width:100%;margin-top:15px}
+th,td{border:1px solid #999;padding:12px;text-align:center}
+th{background:#eee}
+.muted{color:#666}
+.warn{color:#a32929}
+#notice{margin:10px 0;font-size:13px}
+label{cursor:pointer}
+
+/* A4 세로형 시험지 */
+.exam-scroll{overflow-x:auto;max-width:100%;padding:2px 0 10px}
+.sheet.exam-paper{
+  width:210mm;
+  min-width:210mm;
+  min-height:297mm;
+  margin:0 auto;
+  padding:14mm 13mm 12mm;
+  box-shadow:0 3px 16px #00000012
+}
+.exam-paper .columns{
+  min-height:195mm;
+  align-content:start;
+  gap:9mm
+}
+.exam-paper .col+.col{padding-left:9mm}
+.exam-paper .question{margin-bottom:14px}
+.exam-paper .question h3{line-height:1.5;margin-bottom:6px}
+.exam-paper .answer{
+  min-height:58px;
+  font-size:13px;
+  padding:8px;
+  resize:none
+}
+.exam-paper .audio-answer{
+  display:block;
+  width:100%;
+  height:38px;
+  min-height:38px;
+  max-height:38px;
+  border:1px solid #888;
+  padding:6px 9px;
+  font-size:13px;
+  border-radius:0;
+  resize:none
+}
+.exam-paper .audio{margin:7px 0;height:38px}
+.section-intro{
+  font-size:12px;
+  font-weight:700;
+  line-height:1.7;
+  margin:0 0 16px;
+  padding:7px 0;
+  border-bottom:1px solid #555
+}
+.section-intro+.question{margin-top:0}
+.score-breakdown{font-size:13px;color:#555}
+
+/* 제출 확인 */
+.submit-confirm{
+  display:none;
+  background:#fff;
+  border:2px solid #212936;
+  padding:16px 20px;
+  margin:15px auto;
+  max-width:490px;
+  text-align:center
+}
+.submit-confirm.visible{display:block}
+.submit-confirm p{line-height:1.6}
+.submit-confirm .btn{margin:4px}
+
+/* 성적 통지표 */
+.jaecheop-message{
+  text-align:center;
+  font-size:17px;
+  font-weight:700;
+  margin:20px 0 10px;
+  line-height:1.7;
+  white-space:pre-wrap
+}
+.result-evaluation-image{
+  display:block;
+  width:100%;
+  max-width:740px;
+  height:auto;
+  margin:22px auto 18px;
+  border:1px solid #c9dbe8;
+  border-radius:6px
 }
 
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: #20242b;
-  font-family: "Malgun Gothic", Arial, sans-serif;
-}
-
-header {
-  background: white;
-  border-bottom: 1px solid var(--border);
-  padding: 18px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-}
-
-.logo {
-  font-size: 19px;
-  font-weight: 800;
-  color: var(--navy);
-}
-
-nav {
-  display: flex;
-  gap: 15px;
-}
-
-nav button {
-  border: 0;
-  background: transparent;
-  color: var(--navy);
-  font-weight: bold;
-  cursor: pointer;
-}
-
-main {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 18px;
-}
-
-.screen { display: none; }
-.screen.active { display: block; }
-
-.panel {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 35px;
-  margin-bottom: 20px;
-}
-
-.center { text-align: center; }
-
-.eyebrow {
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: #65758d;
-}
-
-h1 {
-  font-size: 36px;
-  color: var(--navy);
-  margin: 15px 0;
-}
-
-h2 { color: var(--navy); }
-
-.subtitle {
-  color: #6b7280;
-  margin-bottom: 30px;
-}
-
-button {
-  font-family: inherit;
-}
-
-.primary {
-  background: var(--navy);
-  border: 0;
-  color: white;
-  padding: 14px 25px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: bold;
-}
-
-.secondary {
-  background: white;
-  border: 1px solid #a9b4c2;
-  color: var(--navy);
-  padding: 12px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .45;
-  cursor: not-allowed;
-}
-
-input[type=text], textarea {
-  font: inherit;
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #cbd1db;
-  border-radius: 5px;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 110px;
-}
-
-.notice {
-  background: #f4f6fa;
-  padding: 17px;
-  border-radius: 6px;
-  line-height: 1.9;
-  color: #465267;
-}
-
-.exam-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-  padding: 14px 20px;
-  background: white;
-  border-radius: 8px;
-}
-
-.timer {
-  color: #b42318;
-  font-weight: bold;
-}
-
-.paper {
-  background: white;
-  padding: 35px;
-  min-height: 650px;
-  border: 1px solid #c9cdd4;
-  box-shadow: 0 5px 25px #17233c10;
-}
-
-.paper-top {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-}
-
-.paper-title {
-  text-align: center;
-  border-bottom: 3px solid #222;
-  padding: 15px 0 22px;
-  margin-bottom: 26px;
-}
-
-.paper-title h2 {
-  color: #111;
-  font-size: 25px;
-  letter-spacing: 2px;
-}
-
-.paper-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 27px;
-}
-
-.paper-column + .paper-column {
-  border-left: 1px solid #d1d5db;
-  padding-left: 27px;
-}
-
-.question {
-  margin-bottom: 34px;
-  break-inside: avoid;
-}
-
-.question-title {
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 1.8;
-  margin-bottom: 14px;
-}
-
-.question small {
-  color: #7c8796;
-}
-
-.choice {
-  display: flex;
-  gap: 8px;
-  padding: 8px;
-  line-height: 1.6;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.choice:hover {
-  background: #f0f3f8;
-}
-
-.audio-box {
-  border: 1px solid #dce1e8;
-  background: #f7f8fa;
-  padding: 13px;
-  border-radius: 6px;
-  margin: 12px 0;
-}
-
-audio { width: 100%; }
-
-.page-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 25px;
-  gap: 10px;
-}
-
-.score {
-  font-size: 56px;
-  font-weight: 800;
-  color: var(--navy);
-}
-
-.error-item {
-  border-bottom: 1px solid var(--border);
-  padding: 16px 0;
-}
-
-.error-item p { line-height: 1.7; }
-
-.rank-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.rank-table th, .rank-table td {
-  padding: 15px;
-  text-align: center;
-  border-bottom: 1px solid #e0e4eb;
-}
-
-.rank-table th {
-  background: #f3f5f8;
-}
-
-.warning {
-  color: #b42318;
-  font-weight: bold;
-}
-
-.muted { color: #777; }
-
-footer {
-  text-align: center;
-  color: #8992a0;
-  padding: 30px;
-  font-size: 12px;
-}
-
-@media(max-width: 700px) {
-  header { flex-direction: column; }
-  main { margin: 20px auto; }
-  .panel, .paper { padding: 20px; }
-  h1 { font-size: 27px; }
-
-  .paper-columns {
-    grid-template-columns: 1fr;
+@page{size:A4 portrait;margin:0}
+@media print{
+  body{background:white}
+  nav,.toolbar,.controls,.submit-actions{display:none!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .exam-scroll{overflow:visible}
+  .sheet.exam-paper{
+    border:0;box-shadow:none;
+    min-height:297mm;
+    page-break-after:always
   }
-
-  .paper-column + .paper-column {
-    border-left: 0;
-    padding-left: 0;
+  .screen:not(.active){display:none!important}
+}
+@media(max-width:700px){
+  .sheet{padding:19px}
+  .title{font-size:23px}
+  .result-grid strong{font-size:18px}
+  .cover{min-height:auto}
+  .sheet.exam-paper{padding:14mm 13mm 12mm}
+  .exam-paper .columns{grid-template-columns:1fr 1fr}
+  .exam-paper .col+.col{
+    border-top:0;
+    border-left:1px solid #aaa;
+    padding-top:0;
+    padding-left:9mm
   }
 }
 </style>
@@ -304,568 +174,842 @@ footer {
 
 <body>
 
-<header>
-  <div class="logo">재천학능력시험</div>
-  <nav>
-    <button onclick="goHome()">시험 안내</button>
-    <button onclick="showRanking()">실시간 순위표</button>
-  </nav>
-</header>
+<nav>
+  <b>임재천학 능력 시험</b>
+  <div>
+    <button onclick="openView('home')">시험 안내</button>
+    <button onclick="openView('rank')">실시간 순위표</button>
+  </div>
+</nav>
 
-<main>
+<main class="wrap">
 
-<!-- 메인 화면 -->
+<!-- 시험 안내 -->
 <section id="home" class="screen active">
-  <div class="panel center">
-    <p class="eyebrow">2027학년도 제1회</p>
-    <h1>재천학능력시험</h1>
-    <h2>임재천 탐구 영역</h2>
-    <p class="subtitle">
-      당신은 임재천에 대해 얼마나 알고 있습니까?
-    </p>
-
-    <div class="notice">
-      총 25문항<br>
-      재천어 듣기평가 5문항<br>
-      객관식 10문항<br>
-      서술형 10문항
+  <div class="sheet cover">
+    <div class="center">
+      <div class="small">2026학년도 임재천 4주년 평가 문제지</div>
+      <h1 class="title">임재천학 능력 시험</h1>
     </div>
-
-    <br>
-    <button class="primary" onclick="showScreen('register')">
-      시험 응시하기
-    </button>
+    <hr class="rule">
+    <h3>응시자 유의사항</h3>
+    <ol class="instructions">
+      <li>문제지 해당란에는 닉네임을 정확히 적어주세요</li>
+      <li>문제는 총 25문항, 듣기영역 4문항, 객관식 10문항, 서술형 11문항 총 25문항입니다</li>
+      <li>제한시간은 총 30분 입니다</li>
+      <li>문항에 따라 배점이 다릅니다. 문항 옆에 배점이 표시가 되어있고, 총점은 50점입니다.</li>
+      <li>출제 범위는 당신이 재첩이라면 맞출 수 있는 범위입니다.</li>
+      <li>이 화면을 벗어날 경우 부정행위로 감지가 되어 경고가 주어집니다.</li>
+      <li>경고 3회 누적 시 모든 점수는 0점으로 처리됩니다.</li>
+    </ol>
+    <div class="center">
+      <button class="btn dark" onclick="openView('register')">
+        시험 응시하기
+      </button>
+    </div>
   </div>
 </section>
 
-<!-- 응시자 정보 -->
+<!-- 성명 입력 -->
 <section id="register" class="screen">
-  <div class="panel">
-    <h2>응시자 정보</h2>
-    <p>시험에 사용할 성명을 입력하세요.</p>
-
-    <label for="studentName">성명</label>
-    <input id="studentName" type="text"
-           maxlength="30" placeholder="성명 입력">
-
-    <h3>시험 유의사항</h3>
-    <div class="notice">
-      1. 시험은 총 25문항으로 구성됩니다.<br>
-      2. 듣기평가에서는 재천님의 실제 음성을 사용합니다.<br>
-      3. 시험 도중 다른 화면으로 이동하면 이탈이 기록될 수 있습니다.<br>
-      4. 시험 문제와 답안은 최종 출제 후 적용됩니다.<br>
-      5. 성적 및 순위 기능은 추후 활성화됩니다.
-    </div>
-
+  <div class="sheet cover">
+    <div class="center small">2026학년도 임재천 4주년 평가 문제지</div>
+    <h2 class="center">응시자 확인</h2>
+    <hr class="rule">
+    <p><b>성명</b></p>
+    <input id="student" class="input" maxlength="30"
+           placeholder="닉네임을 입력하세요">
+    <p class="small">입력한 성명은 시험 화면과 결과 화면에 표시됩니다.</p>
     <p>
       <label>
         <input type="checkbox" id="agree">
-        위 유의사항을 확인했습니다.
+        응시자 유의사항을 확인했습니다.
       </label>
     </p>
-
-    <button class="primary" onclick="startExam()">
-      시험 화면 입장
-    </button>
+    <button class="btn dark" onclick="startExam()">시험 시작</button>
   </div>
 </section>
 
-<!-- 시험 화면 -->
+<!-- 시험지 -->
 <section id="exam" class="screen">
-
-  <div class="exam-toolbar">
-    <span>응시자: <b id="displayName"></b></span>
-    <span id="timer" class="timer">제한시간 미설정</span>
-    <span id="exitCount">화면 이탈 0회</span>
+  <div class="toolbar row">
+    <span>성명: <b id="studentDisplay"></b></span>
+    <span id="clock">남은 시간 30:00</span>
+    <span id="exit">화면 이탈 경고 0 / 3회</span>
   </div>
 
-  <div class="paper">
-    <div class="paper-top">
-      <span>2027학년도 제1회 재천학능력시험</span>
-      <span>임재천 탐구 영역</span>
-    </div>
+  <p id="warningMessage" class="warn" role="status"
+     style="display:none"></p>
 
-    <div class="paper-title">
-      <h2>임재천 탐구 영역</h2>
-      <p>성명: <span id="paperName"></span></p>
-    </div>
+  <div class="exam-scroll">
+    <div class="sheet exam-paper">
+      <div class="paper-heading">
+        <span>2026학년도 임재천 4주년 평가 문제지</span>
+        <span>임재천 탐구 영역</span>
+      </div>
 
-    <div id="paperColumns" class="paper-columns"></div>
+      <div class="paper-title">
+        <small>제1교시</small>
+        <h2>임재천 탐구 영역</h2>
+        <small>성명: <b id="paperStudent"></b></small>
+      </div>
 
-    <div class="page-controls">
-      <button class="secondary" onclick="prevPage()">이전</button>
-      <span id="pageNumber"></span>
-      <button class="secondary" onclick="nextPage()">다음</button>
+      <div class="columns">
+        <div class="col" id="left"></div>
+        <div class="col" id="right"></div>
+      </div>
+
+      <div class="footer-num" id="paperPage">1 / 5</div>
     </div>
   </div>
 
-  <div class="panel center">
-    <p id="answerProgress">응답한 문항: 0 / 25</p>
-    <button class="primary" onclick="submitExam()">
-      답안 제출
+  <div class="controls">
+    <button class="btn" id="prevButton" onclick="turn(-1)">
+      이전 페이지
     </button>
+    <span id="progress">0 / 25문항 응답</span>
+    <button class="btn" id="nextButton" onclick="turn(1)">
+      다음 페이지
+    </button>
+  </div>
+
+  <div class="center submit-actions">
+    <button class="btn dark" id="submitButton"
+            type="button" onclick="requestSubmit()">
+      최종 답안 제출
+    </button>
+
+    <div id="submitConfirm" class="submit-confirm">
+      <strong>최종 답안 제출 확인</strong>
+      <p id="submitConfirmText">
+        답안을 제출하면 수정할 수 없습니다.
+      </p>
+      <button class="btn dark" type="button"
+              onclick="submitExam(false)">
+        제출하고 채점하기
+      </button>
+      <button class="btn" type="button" onclick="cancelSubmit()">
+        계속 풀기
+      </button>
+    </div>
   </div>
 </section>
 
-<!-- 제출 확인 -->
+<!-- 성적 통지표 -->
 <section id="result" class="screen">
-  <div class="panel center">
-    <h2>시험 결과</h2>
-    <p id="resultName"></p>
+  <div class="sheet cover">
+    <div class="center small">2026학년도 임재천 4주년 평가 문제지</div>
+    <h2 class="center">성적 통지표</h2>
+    <hr class="rule">
 
-    <p class="muted">현재는 시험지 미리보기 단계입니다.</p>
-    <p class="score" id="scoreText">채점 준비 중</p>
+    <p>성명: <b id="resultName"></b></p>
 
-    <p id="resultDescription">
-      문제와 정답이 확정되면 자동 채점이 활성화됩니다.
-    </p>
+    <div class="result-grid">
+      <div>
+        <div class="small">총점 / 50점</div>
+        <strong id="scoreValue">-</strong>
+      </div>
+      <div>
+        <div class="small">정답 문항 수</div>
+        <strong id="rightCount">-</strong>
+      </div>
+      <div>
+        <div class="small">전체 석차</div>
+        <strong>미연결</strong>
+      </div>
+    </div>
 
-    <button class="secondary" onclick="showScreen('review')">
-      제출 답안 확인
-    </button>
+    <p id="jaecheopMessage" class="jaecheop-message"></p>
 
-    <button class="primary" onclick="showRanking()">
-      실시간 순위표
-    </button>
+    <img class="result-evaluation-image"
+         src="점수별-재첩이-평가표.webp"
+         alt="점수별 재첩이 평가표">
+
+    <p class="small" id="resultNote"></p>
+
+    <div class="tabs">
+      <button class="btn" onclick="openView('review')">
+        정답·오답 및 해설 보기
+      </button>
+      <button class="btn dark" onclick="openView('rank')">
+        실시간 순위표 보기
+      </button>
+    </div>
   </div>
 </section>
 
-<!-- 답안 검토 -->
+<!-- 정답 및 해설 -->
 <section id="review" class="screen">
-  <div class="panel">
-    <h2>답안 및 오답 확인</h2>
-    <p class="muted">
-      정답 데이터가 등록되면 이곳에서 오답과 해설을 확인할 수 있습니다.
-    </p>
-    <div id="reviewList"></div>
-
-    <br>
-    <button class="secondary" onclick="showScreen('result')">
-      성적표로 돌아가기
+  <div class="sheet">
+    <h2>정답 및 해설</h2>
+    <div class="tabs">
+      <button class="btn" onclick="renderReview('all')">전체 문항</button>
+      <button class="btn" onclick="renderReview('correct')">정답 문항</button>
+      <button class="btn" onclick="renderReview('wrong')">오답 문항</button>
+      <button class="btn" onclick="renderReview('pending')">미채점 문항</button>
+    </div>
+    <div id="reviews"></div>
+    <button class="btn" onclick="openView('result')">
+      성적 통지표로
     </button>
   </div>
 </section>
 
-<!-- 실시간 순위표 -->
-<section id="ranking" class="screen">
-  <div class="panel">
-    <h2>🏆 재천학능력시험 실시간 순위표</h2>
-    <p id="rankingStatus" class="muted">
-      실시간 순위 데이터베이스 연결 대기 중
+<!-- 순위표 -->
+<section id="rank" class="screen">
+  <div class="sheet cover">
+    <h2>임재천학 능력 시험 전체 석차</h2>
+    <hr class="rule">
+    <p class="muted">
+      실시간 순위표는 데이터베이스 및 서버 측 채점 연결 후
+      활성화됩니다. 현재는 순위를 표시하거나 저장하지 않습니다.
     </p>
-
-    <table class="rank-table">
+    <table>
       <thead>
-        <tr>
-          <th>순위</th>
-          <th>성명</th>
-          <th>점수</th>
-        </tr>
+        <tr><th>석차</th><th>성명</th><th>점수</th></tr>
       </thead>
-      <tbody id="rankingBody">
-        <tr>
-          <td colspan="3">아직 등록된 성적이 없습니다.</td>
-        </tr>
+      <tbody>
+        <tr><td colspan="3">연결 대기 중</td></tr>
       </tbody>
     </table>
-
-    <br>
-    <button class="secondary" onclick="goHome()">
-      메인으로 돌아가기
-    </button>
   </div>
 </section>
 
 </main>
 
-<footer>
-  2027 재천학능력시험 | 비공식 팬 제작 프로젝트
-</footer>
-
 <script>
 "use strict";
 
-/*
-  재천학능력시험 v1.0
+// 실제 시험 문제 25문항
+const QUESTIONS = [
+  {
+    id:1,type:"audio",
+    title:"다음 음성을 듣고, 임재천이 성대모사한 인물의 이름을 쓰시오.",
+    options:[],answer:"제갈금자",aliases:[],
+    explain:"제갈금자 성대모사 음성입니다.",
+    audio:"audio/Listening_01.mp3",points:3
+  },
+  {
+    id:2,type:"audio",
+    title:"다음 음성을 듣고, 임재천이 언급한 물건의 이름을 쓰시오.",
+    options:[],answer:"딸딸이 - 슬리퍼",
+    aliases:["딸딸이","슬리퍼","딸딸이 슬리퍼","딸딸이 - 슬리퍼"],
+    explain:"「딸딸이」 또는 「슬리퍼」 중 하나만 적어도 정답입니다.",
+    audio:"audio/Listening_04.mp3",points:2
+  },
+  {
+    id:3,type:"audio",
+    title:"다음 음성을 듣고, 임재천이 발음한 단어를 쓰시오.",
+    options:[],answer:"얼낌걸낌",aliases:[],
+    explain:"기준 정답은 「얼낌걸낌」이며, 비슷한 발음의 오타도 인정합니다.",
+    audio:"audio/Listening_02.mp3",points:3
+  },
+  {
+    id:4,type:"audio",
+    title:"다음 음성을 듣고, 임재천이 발음한 문장을 쓰시오.",
+    options:[],answer:"목욕물 목욕욕 무목욕 무생채",
+    aliases:["목욕물, 목욕욕, 무목욕, 무생채"],
+    explain:"기준 정답은 「목욕물 목욕욕 무목욕 무생채」이며, 일부 발음·띄어쓰기 차이를 인정합니다.",
+    audio:"audio/Listening_03.mp3",points:3
+  },
+  {
+    id:5,type:"choice",
+    title:"다음 중 임재천이 제2회 숙제 발표회에서 부르지 않은 곡은?",
+    options:["뭔가 잘못됐어 / 권진아","토끼 / 우예린",
+      "푸름과 여름 / 미스터 그린애플","불 / 유다빈 밴드"],
+    answer:3,aliases:[],
+    explain:"유다빈 밴드의 불은 제 3회 숙제 발표회에서 불렀습니다",
+    audio:"",points:2
+  },
+  {
+    id:6,type:"choice",
+    title:"다음 중 임재천의 오리지널 곡에 해당하지 않는 것은?",
+    options:["우연의 은하수","참 이상해","틈새시장","소나기 (downpour)"],
+    answer:3,aliases:[],
+    explain:"소나기는 오리지널 곡이 아닌 임재천의 커버곡입니다.",
+    audio:"",points:1
+  },
+  {
+    id:7,type:"choice",
+    title:"다음 중 임재천이 플레이하는 게임에 해당하지 않는 것은?",
+    options:["명조","붕괴 : 스타레일","니케","원신"],
+    answer:3,aliases:[],
+    explain:"재천님은 원신 게임을 하고 있지 않습니다",
+    audio:"",points:2
+  },
+  {
+    id:8,type:"choice",
+    title:"다음 중 임재천의 단독 콘서트 「SALTLINE」 기념 굿즈에 해당하지 않는 것은?",
+    options:["아크릴 스탠드","장패드","재짱이 원형 쿠션",
+      "재천곤듀 랜덤 포토카드"],
+    answer:3,aliases:[],
+    explain:"재천곤듀 랜덤 포토카드는 2주년에 나온 굿즈입니다.",
+    audio:"",points:1
+  },
+  {
+    id:9,type:"choice",
+    title:"다음 중 임재천이 1000일 기념 콘서트에서 부르지 않은 곡은?",
+    options:["악마의 아이","not a dream","피차일반","별의 하모니"],
+    answer:2,aliases:[],
+    explain:"피차일반은 1주년 콘서트에서 부른 곡입니다.",
+    audio:"",points:2
+  },
+  {
+    id:10,type:"choice",
+    title:"다음 중 임재천과 함께 「백유화」를 커버한 버튜버는?",
+    options:["이오몽","마이곰이","밍턴","하디아"],
+    answer:0,aliases:[],explain:"",audio:"",points:1
+  },
+  {
+    id:11,type:"choice",
+    title:"임재천의 첫 번째 오리지널 음원 「우연의 은하수」가 발매된 연도는?",
+    options:["2024년","2025년","2023년","2021년"],
+    answer:1,aliases:[],
+    explain:"발매일은 2025년 1월 14일입니다.",
+    audio:"",points:2
+  },
+  {
+    id:12,type:"choice",
+    title:"다음 중 임재천의 공식 팬카페 명칭으로 옳은 것은?",
+    options:["임재천의 재첩국","재천이네 수족관",
+      "곤듀님의 궁전","재첩마을 이야기"],
+    answer:0,aliases:[],explain:"",audio:"",points:1
+  },
+  {
+    id:13,type:"choice",
+    title:"다음 중 임재천의 공식 세계관에서의 신분으로 옳은 것은?",
+    options:["재첩국 여왕","재첩국 막내공주",
+      "재첩국 셋째공주","재첩국 총리"],
+    answer:1,aliases:[],explain:"",audio:"",points:2
+  },
+  {
+    id:14,type:"choice",
+    title:"2025년 틈새시장이 발표한 첫 번째 오리지널 앨범의 제목으로 옳은 것은?",
+    options:["SALTLINE","PALETTE","TSSJ (틈새시장)","GALAXY"],
+    answer:1,aliases:[],explain:"",audio:"",points:1
+  },
+  {
+    id:15,type:"text",
+    title:"임재천의 키를 cm 단위로 쓰시오.",
+    options:[],answer:"155cm",
+    aliases:["155","155센티미터"],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:16,type:"text",
+    title:"2024년에 시작된 임재천의 음악 라이브 토크쇼에 출연한 첫 번째 게스트의 이름을 쓰시오.",
+    options:[],answer:"밍턴",aliases:[],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:17,type:"text",
+    title:"임재천이 속한 「붕스동」의 멤버 5명을 모두 쓰시오.",
+    options:[],answer:"몽새, 새잠, 윤치, 포요, 한사기",
+    aliases:[],
+    explain:"멤버 5명을 모두 적어야 합니다.",
+    audio:"",points:3
+  },
+  {
+    id:18,type:"text",
+    title:"임재천의 방송에서 말을 듣지 않는 재첩이를 가리키는 명칭을 쓰시오.",
+    options:[],answer:"가리비",aliases:[],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:19,type:"text",
+    title:"과거 SOOP에서 키가 작은 버추얼 스트리머들을 「페어리」라고 부르던 문화에서 유래한 임재천의 별명을 쓰시오.",
+    options:[],answer:"페어리 수장",
+    aliases:["페어리수장"],
+    explain:"키가 작은 사람들 중에서 제일 키가 커서 생기게 된 별명입니다.",
+    audio:"",points:2
+  },
+  {
+    id:20,type:"text",
+    title:"임재천의 첫 유튜브 멤버십 방송이 진행된 날짜를 월과 일로 쓰시오.",
+    options:[],answer:"10월 20일",
+    aliases:["10/20","10월20일","10.20"],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:21,type:"text",
+    title:"임재천이 스콘에 입사한 날짜를 월과 일로 쓰시오.",
+    options:[],answer:"10월 19일",
+    aliases:["10/19","10월19일","10.19"],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:22,type:"text",
+    title:"틈새시장 1주년 오리지널 앨범 「PALETTE」에 수록된 임재천의 솔로곡 제목을 쓰시오.",
+    options:[],answer:"참 이상해",aliases:[],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:23,type:"text",
+    title:"임재천이 치지직으로 이적한 날짜를 월과 일로 쓰시오.",
+    options:[],answer:"3월 27일",
+    aliases:["3/27","3월27일","3.27"],
+    explain:"",audio:"",points:3
+  },
+  {
+    id:24,type:"text",
+    title:"임재천의 4주년 기념 커버곡 제목과 원곡 가수의 이름을 모두 쓰시오.",
+    options:[],answer:"윤하 - 맹그로브",
+    aliases:["윤하 맹그로브","맹그로브 윤하","윤하의 맹그로브"],
+    explain:"",audio:"",points:2
+  },
+  {
+    id:25,type:"text",
+    title:"임재천이 매월 15일 오후 5시에 진행하는 고정 콘텐츠의 제목을 쓰시오.",
+    options:[],answer:"재냥이의 날",
+    aliases:["재냥이의날"],
+    explain:"",audio:"",points:2
+  }
+];
 
-  현재 상태:
-  - 25문항 시험지 미리보기
-  - 듣기 5 / 객관식 10 / 서술형 10
-  - 성명 입력
-  - 화면 이탈 횟수 표시
-  - 답안 임시 저장
+const EXAM_MINUTES=30;
 
-  정식 시험 운영 전 필요한 작업:
-  - 문제와 정답 등록
-  - 제한시간과 배점 확정
-  - 서버 측 자동 채점 구현
-  - 실시간 순위표 DB 연결
-*/
+const PAGES=[
+  [1,2,3,4],
+  [5,6,7,8,9,10],
+  [11,12,13,14],
+  [15,16,17,18,19],
+  [20,21,22,23,24,25]
+];
 
-// 아직 시험 시간이 확정되지 않았으므로 null
-const EXAM_MINUTES = null;
+const SECTION_NOTICES={
+  1:"1번 문항부터 4번 문항까지는 듣기 평가입니다. 잘 듣고 알맞은 답을 적어주세요",
+  5:"5번 문항부터 14번 문항까지는 객관식 평가입니다.",
+  15:"15번부터 25번까지는 서술형 문항입니다."
+};
 
-// 실제 시험이 준비되면 운영 설정을 변경
-const EXAM_OPEN = false;
+let studentName="";
+let page=0;
+let answers={};
+let started=false;
+let submitted=false;
+let exits=0;
+let graded=[];
+let deadline=0;
+let timerId=null;
 
-let studentName = "";
-let currentPage = 0;
-let exitCount = 0;
-let examStarted = false;
-let submitted = false;
-let answers = {};
-let timeRemaining = null;
-let timerInterval = null;
+const $=id=>document.getElementById(id);
 
-// 문항 목록: 실제 문제 확정 후 교체
-const questions = Array.from({length: 25}, (_, index) => {
-  const id = index + 1;
-  const type = id <= 5
-    ? "audio"
-    : id <= 15
-      ? "choice"
-      : "text";
-
-  return {
-    id,
-    type,
-    title:
-      type === "audio"
-        ? "다음 음성을 듣고 재천님이 말한 표현을 고르시오."
-        : type === "choice"
-          ? "다음 중 임재천님과 관련된 설명으로 옳은 것은?"
-          : "다음 물음에 대한 답을 작성하시오.",
-    audio: "",
-    options: ["선택지 1", "선택지 2", "선택지 3",
-              "선택지 4", "선택지 5"],
-    ready: false
-  };
-});
-
-function showScreen(id) {
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
-
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
+// 화면 전환
+function openView(id){
+  if(started&&!submitted&&id!=="exam"&&id!=="register"){
+    if(!confirm("시험 화면을 벗어나시겠습니까? 이탈 경고가 누적됩니다."))return;
+    registerWarning();
+  }
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0,0);
 }
 
-function goHome() {
-  if (examStarted && !submitted) {
-    const ok = confirm(
-      "시험 화면을 나가시겠습니까? 작성한 답안은 이 페이지를 열어둔 동안만 유지됩니다."
-    );
-    if (!ok) return;
-    exitCount++;
-  }
-  showScreen("home");
+// 시험 시작
+function startExam(){
+  const name=$("student").value.trim();
+
+  if(!name)return alert("닉네임을 입력해주세요.");
+  if(!$("agree").checked)return alert("유의사항을 확인해주세요.");
+
+  studentName=name;
+  page=0;
+  answers={};
+  exits=0;
+  submitted=false;
+  started=true;
+
+  cancelSubmit();
+
+  $("studentDisplay").textContent=name;
+  $("paperStudent").textContent=name;
+  $("warningMessage").style.display="none";
+
+  updateExit();
+  renderPaper();
+
+  deadline=Date.now()+EXAM_MINUTES*60*1000;
+  clearInterval(timerId);
+  updateClock();
+  timerId=setInterval(updateClock,1000);
+
+  openView("exam");
 }
 
-function showRanking() {
-  if (examStarted && !submitted) {
-    exitCount++;
-  }
-  updateExitCount();
-  showScreen("ranking");
+// 30분 타이머
+function updateClock(){
+  if(!started||submitted)return;
+
+  const remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+
+  $("clock").textContent=
+    "남은 시간 "+
+    String(Math.floor(remaining/60)).padStart(2,"0")+":"+
+    String(remaining%60).padStart(2,"0");
+
+  if(remaining===0)submitExam(true);
 }
 
-function startExam() {
-  const input = document.getElementById("studentName");
-  const agree = document.getElementById("agree");
+// 문제 만들기
+function makeQuestion(q){
+  const el=document.createElement("section");
+  el.className="question";
 
-  const name = input.value.trim();
+  const h=document.createElement("h3");
+  h.textContent=q.id+". "+q.title+" ["+q.points+"점]";
+  el.append(h);
 
-  if (!name) {
-    alert("성명을 입력해주세요.");
-    input.focus();
-    return;
+  if(q.type==="audio"){
+    const audio=document.createElement("audio");
+    audio.className="audio";
+    audio.controls=true;
+    audio.preload="none";
+    audio.src=q.audio;
+    el.append(audio);
   }
 
-  if (!agree.checked) {
-    alert("시험 유의사항을 확인해주세요.");
-    return;
-  }
+  if(q.type==="choice"){
+    q.options.forEach((s,i)=>{
+      const label=document.createElement("label");
+      label.className="opt";
 
-  studentName = name;
-  examStarted = true;
-  submitted = false;
-  currentPage = 0;
-  exitCount = 0;
-  answers = {};
+      const radio=document.createElement("input");
+      radio.type="radio";
+      radio.name="q"+q.id;
+      radio.checked=answers[q.id]===String(i);
 
-  document.getElementById("displayName").textContent = name;
-  document.getElementById("paperName").textContent = name;
-
-  renderQuestions();
-  updateExitCount();
-  updateProgress();
-  startTimer();
-
-  showScreen("exam");
-}
-
-function startTimer() {
-  clearInterval(timerInterval);
-
-  const timerEl = document.getElementById("timer");
-
-  if (EXAM_MINUTES === null) {
-    timerEl.textContent = "제한시간 미설정";
-    return;
-  }
-
-  timeRemaining = EXAM_MINUTES * 60;
-
-  timerInterval = setInterval(() => {
-    if (!examStarted || submitted) {
-      clearInterval(timerInterval);
-      return;
-    }
-
-    const minutes = Math.floor(timeRemaining / 60);
-    const seconds = timeRemaining % 60;
-
-    timerEl.textContent =
-      String(minutes).padStart(2, "0") + ":" +
-      String(seconds).padStart(2, "0");
-
-    if (timeRemaining <= 0) {
-      clearInterval(timerInterval);
-      submitExam(true);
-      return;
-    }
-
-    timeRemaining--;
-  }, 1000);
-}
-
-// 한 페이지에 최대 6문항
-const PAGE_SIZE = 6;
-
-function renderQuestions() {
-  const start = currentPage * PAGE_SIZE;
-  const currentQuestions = questions.slice(start, start + PAGE_SIZE);
-
-  const columns = document.getElementById("paperColumns");
-  columns.innerHTML = "";
-
-  const middle = Math.ceil(currentQuestions.length / 2);
-
-  const left = document.createElement("div");
-  left.className = "paper-column";
-
-  const right = document.createElement("div");
-  right.className = "paper-column";
-
-  currentQuestions.forEach((question, index) => {
-    const target = index < middle ? left : right;
-    target.appendChild(createQuestion(question));
-  });
-
-  columns.appendChild(left);
-  columns.appendChild(right);
-
-  const totalPages = Math.ceil(questions.length / PAGE_SIZE);
-
-  document.getElementById("pageNumber").textContent =
-    `${currentPage + 1} / ${totalPages} 페이지`;
-
-  updateProgress();
-}
-
-function createQuestion(question) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "question";
-
-  const heading = document.createElement("div");
-  heading.className = "question-title";
-  heading.textContent = `${question.id}. ${question.title}`;
-
-  wrapper.appendChild(heading);
-
-  const status = document.createElement("small");
-  status.textContent = "[출제 예정]";
-  wrapper.appendChild(status);
-
-  if (question.type === "audio") {
-    const audioBox = document.createElement("div");
-    audioBox.className = "audio-box";
-
-    if (question.audio) {
-      const audio = document.createElement("audio");
-      audio.controls = true;
-      audio.preload = "none";
-      audio.src = question.audio;
-      audioBox.appendChild(audio);
-    } else {
-      audioBox.textContent = "🔊 음성 파일 등록 예정";
-    }
-
-    wrapper.appendChild(audioBox);
-  }
-
-  if (question.type === "audio" || question.type === "choice") {
-    question.options.forEach((option, index) => {
-      const label = document.createElement("label");
-      label.className = "choice";
-
-      const radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = `q${question.id}`;
-      radio.value = String(index);
-      radio.checked = answers[question.id] === String(index);
-
-      radio.addEventListener("change", () => {
-        answers[question.id] = String(index);
+      radio.addEventListener("change",()=>{
+        answers[q.id]=String(i);
         updateProgress();
       });
 
-      const content = document.createElement("span");
-      content.textContent =
-        ["①", "②", "③", "④", "⑤"][index] + " " + option;
+      const t=document.createElement("span");
+      t.textContent=["①","②","③","④","⑤"][i]+" "+s;
 
-      label.appendChild(radio);
-      label.appendChild(content);
-      wrapper.appendChild(label);
+      label.append(radio,t);
+      el.append(label);
     });
-  } else {
-    const textarea = document.createElement("textarea");
-    textarea.placeholder = "답안을 작성하세요.";
-    textarea.value = answers[question.id] || "";
+  }else{
+    const area=document.createElement(q.type==="audio"?"input":"textarea");
 
-    textarea.addEventListener("input", () => {
-      answers[question.id] = textarea.value;
+    if(q.type==="audio"){
+      area.type="text";
+      area.className="audio-answer";
+      area.placeholder="정답을 입력하세요";
+    }else{
+      area.className="answer";
+      area.placeholder="답안을 직접 작성하세요";
+    }
+
+    area.value=answers[q.id]||"";
+
+    area.addEventListener("input",()=>{
+      answers[q.id]=area.value;
       updateProgress();
     });
 
-    wrapper.appendChild(textarea);
+    el.append(area);
   }
 
-  return wrapper;
+  return el;
 }
 
-function nextPage() {
-  const maxPage = Math.ceil(questions.length / PAGE_SIZE) - 1;
+// A4 시험지 구성
+function renderPaper(){
+  const ids=PAGES[page];
+  const subset=ids.map(id=>QUESTIONS.find(q=>q.id===id));
+  const mid=Math.ceil(subset.length/2);
 
-  if (currentPage < maxPage) {
-    currentPage++;
-    renderQuestions();
-    window.scrollTo(0, 0);
-  }
-}
+  const left=subset.slice(0,mid).map(makeQuestion);
+  const right=subset.slice(mid).map(makeQuestion);
 
-function prevPage() {
-  if (currentPage > 0) {
-    currentPage--;
-    renderQuestions();
-    window.scrollTo(0, 0);
-  }
-}
-
-function getAnsweredCount() {
-  return questions.filter(question => {
-    const answer = answers[question.id];
-    return answer !== undefined &&
-      String(answer).trim() !== "";
-  }).length;
-}
-
-function updateProgress() {
-  document.getElementById("answerProgress").textContent =
-    `응답한 문항: ${getAnsweredCount()} / 25`;
-}
-
-function updateExitCount() {
-  document.getElementById("exitCount").textContent =
-    `화면 이탈 ${exitCount}회`;
-}
-
-function submitExam(force = false) {
-  if (!force) {
-    const answered = getAnsweredCount();
-    const message =
-      `총 25문항 중 ${answered}문항에 응답했습니다.\n` +
-      "답안을 제출하시겠습니까?";
-
-    if (!confirm(message)) return;
+  if(SECTION_NOTICES[ids[0]]){
+    const note=document.createElement("p");
+    note.className="section-intro";
+    note.textContent=SECTION_NOTICES[ids[0]];
+    left.unshift(note);
   }
 
-  submitted = true;
-  examStarted = false;
+  $("left").replaceChildren(...left);
+  $("right").replaceChildren(...right);
 
-  clearInterval(timerInterval);
+  $("paperPage").textContent=(page+1)+" / "+PAGES.length;
+  $("prevButton").style.visibility=page===0?"hidden":"visible";
+  $("nextButton").style.display=
+    page===PAGES.length-1?"none":"inline-block";
 
-  document.getElementById("resultName").textContent =
-    `응시자: ${studentName}`;
-
-  if (EXAM_OPEN) {
-    // 정식 시험 운영 시에는 이곳에서
-    // 서버 측 채점 API를 호출해야 합니다.
-    document.getElementById("scoreText").textContent =
-      "채점 시스템 연결 대기";
-  } else {
-    document.getElementById("scoreText").textContent =
-      "채점 준비 중";
-  }
-
-  renderReview();
-  showScreen("result");
+  updateProgress();
 }
 
-function renderReview() {
-  const container = document.getElementById("reviewList");
-  container.innerHTML = "";
+function turn(delta){
+  const next=page+delta;
+  if(next<0||next>=PAGES.length)return;
 
-  questions.forEach(question => {
-    const item = document.createElement("div");
-    item.className = "error-item";
+  page=next;
+  renderPaper();
+  window.scrollTo(0,0);
+}
 
-    const title = document.createElement("strong");
-    title.textContent = `${question.id}번. ${question.title}`;
+function updateProgress(){
+  $("progress").textContent=
+    QUESTIONS.filter(q=>String(answers[q.id]??"").trim()).length+
+    " / 25문항 응답";
+}
 
-    const answer = document.createElement("p");
-    const value = answers[question.id];
+// 화면 이탈 경고
+function updateExit(){
+  $("exit").textContent=
+    "화면 이탈 경고 "+exits+" / 3회"+
+    (exits>=3?" · 점수 0점 처리":"");
+}
 
-    let display = "미응답";
+function registerWarning(){
+  if(!started||submitted)return;
 
-    if (value !== undefined && String(value).trim() !== "") {
-      if (question.type === "text") {
-        display = value;
-      } else {
-        display = question.options[Number(value)] || "미응답";
-      }
+  exits++;
+  updateExit();
+
+  const message=exits>=3
+    ?"화면 이탈 경고가 3회 누적되어 최종 점수는 0점으로 처리됩니다."
+    :"화면 이탈이 감지되었습니다. 경고 "+exits+
+      "/3회. 3회 누적되면 점수가 0점으로 처리됩니다.";
+
+  $("warningMessage").textContent=message;
+  $("warningMessage").style.display="block";
+}
+
+// 정답 비교
+function normalize(v){
+  return String(v||"").toLowerCase()
+    .replace(/[\s·.,\/()\-]/g,"");
+}
+
+function editDistance(a,b){
+  const row=Array.from({length:b.length+1},(_,i)=>i);
+
+  for(let i=1;i<=a.length;i++){
+    let prev=row[0];
+    row[0]=i;
+
+    for(let j=1;j<=b.length;j++){
+      const old=row[j];
+      row[j]=Math.min(
+        row[j]+1,
+        row[j-1]+1,
+        prev+(a[i-1]===b[j-1]?0:1)
+      );
+      prev=old;
     }
+  }
 
-    answer.textContent = `제출한 답: ${display}`;
+  return row[b.length];
+}
 
-    const explanation = document.createElement("p");
-    explanation.className = "muted";
-    explanation.textContent = "정답 및 해설 등록 예정";
+function similarity(a,b){
+  a=normalize(a);
+  b=normalize(b);
 
-    item.appendChild(title);
-    item.appendChild(answer);
-    item.appendChild(explanation);
+  if(!a||!b)return 0;
 
-    container.appendChild(item);
+  return 1-editDistance(a,b)/Math.max(a.length,b.length);
+}
+
+// 서술형 및 듣기평가 채점
+function matches(q,v){
+  const cleaned=normalize(v);
+  if(!cleaned)return false;
+
+  // 2번: 딸딸이 또는 슬리퍼
+  if(q.id===2){
+    return ["딸딸이","슬리퍼","딸딸이슬리퍼"]
+      .some(a=>cleaned===normalize(a));
+  }
+
+  // 3번: 비슷한 발음 인정
+  if(q.id===3){
+    return similarity(v,q.answer)>=0.70;
+  }
+
+  // 4번: 일부 오타와 띄어쓰기 인정
+  if(q.id===4){
+    const target=["목욕물","목욕욕","무목욕","무생채"];
+    const given=String(v).trim()
+      .split(/[\s,，·/]+/)
+      .filter(Boolean);
+
+    const nearly=target.filter(word=>
+      given.some(x=>similarity(x,word)>=0.70)
+    ).length;
+
+    return nearly>=3||
+      (similarity(v,q.answer)>=0.72&&normalize(v).length>=9);
+  }
+
+  // 17번: 다섯 명 모두 작성
+  if(q.id===17){
+    const words=["몽새","새잠","윤치","포요","한사기"];
+    return words.every(w=>cleaned.includes(normalize(w)));
+  }
+
+  return [q.answer,...(q.aliases||[])]
+    .some(a=>normalize(a)===cleaned);
+}
+
+function evaluate(){
+  return QUESTIONS.map(q=>{
+    const input=answers[q.id]??"";
+
+    return {
+      q,
+      input,
+      eligible:true,
+      correct:q.type==="choice"
+        ?String(q.answer)===String(input)
+        :matches(q,input)
+    };
   });
 }
 
-// 탭을 숨기거나 브라우저를 최소화할 때 감지
-document.addEventListener("visibilitychange", () => {
-  if (!examStarted || submitted) return;
+// 제출 확인
+function requestSubmit(){
+  if(submitted)return;
 
-  if (document.hidden) {
-    exitCount++;
-    updateExitCount();
+  const answered=QUESTIONS.filter(q=>
+    String(answers[q.id]??"").trim()
+  ).length;
+
+  $("submitConfirmText").textContent=
+    "총 25문항 중 "+answered+
+    "문항에 응답했습니다. 제출 후 답안을 수정할 수 없습니다.";
+
+  $("submitConfirm").classList.add("visible");
+  $("submitConfirm").scrollIntoView({
+    block:"center",
+    behavior:"smooth"
+  });
+}
+
+function cancelSubmit(){
+  $("submitConfirm").classList.remove("visible");
+}
+
+// 자동 채점 및 성적표
+function submitExam(auto=false){
+  if(submitted)return;
+
+  cancelSubmit();
+
+  try{
+    graded=evaluate();
+
+    const scoreRaw=graded.reduce(
+      (sum,g)=>sum+(g.correct?g.q.points:0),0
+    );
+
+    const score=exits>=3?0:scoreRaw;
+    const right=graded.filter(g=>g.correct).length;
+
+    $("resultName").textContent=studentName;
+    $("scoreValue").textContent=score+"점";
+    $("rightCount").textContent=right+" / 25";
+
+    let message="";
+
+    if(score===50){
+      message="재첩 당신을 명예 재첩으로 임명합니다.";
+    }else if(score>=40){
+      message="당신은 열혈 재첩이 입니다!!";
+    }else if(score>=30){
+      message="이제 막 곤듀 방송을 보기 시작한 유입 재첩입니다.";
+    }else if(score>=20){
+      message="재첩아 곤듀 방송만 보는 거 아녔어?...";
+    }else if(score>=10){
+      message="재첩아 곤듀에게 관심 좀 가져!!";
+    }
+
+    $("jaecheopMessage").textContent=message;
+
+    $("resultNote").textContent=exits>=3
+      ?"화면 이탈 경고 "+exits+
+       "회 누적: 규칙에 따라 최종 점수 0점 처리 · 정답 수는 참고용입니다."
+      :"자동 채점 완료 · 50점 만점. 실시간 순위표는 서버 연결 전입니다.";
+
+    submitted=true;
+    started=false;
+    clearInterval(timerId);
+
+    openView("result");
+    renderReview("all");
+
+  }catch(err){
+    console.error("자동 채점 오류:",err);
+    alert("채점 중 오류가 발생했습니다. 다시 제출해주세요.");
+  }
+}
+
+// 정답 및 오답 해설
+function renderReview(filter="all"){
+  const root=$("reviews");
+  root.replaceChildren();
+
+  const selected=graded.filter(g=>
+    filter==="all"||
+    (filter==="correct"&&g.correct===true)||
+    (filter==="wrong"&&g.correct===false)||
+    (filter==="pending"&&!g.eligible)
+  );
+
+  selected.forEach(g=>{
+    const {q,input,correct}=g;
+
+    const div=document.createElement("div");
+    div.className="review";
+
+    const head=document.createElement("h3");
+    head.textContent=q.id+". "+q.title+" ["+q.points+"점]";
+
+    const status=document.createElement("b");
+    status.className=correct?"good":"bad";
+    status.textContent=correct?"정답":"오답";
+
+    const mine=document.createElement("p");
+    mine.textContent="제출 답안: "+(
+      String(input).trim()
+        ?q.type==="choice"
+          ?q.options[Number(input)]
+          :input
+        :"미응답"
+    );
+
+    const key=document.createElement("p");
+    key.textContent="정답: "+(
+      q.type==="choice"
+        ?q.options[q.answer]
+        :q.answer
+    );
+
+    div.append(head,status,mine,key);
+
+    if(q.explain){
+      const explanation=document.createElement("p");
+      explanation.textContent="해설: "+q.explain;
+      div.append(explanation);
+    }
+
+    root.append(div);
+  });
+
+  if(!root.children.length){
+    root.textContent="해당하는 문항이 없습니다.";
+  }
+}
+
+// 다른 탭으로 이동했을 때
+document.addEventListener("visibilitychange",()=>{
+  if(started&&!submitted&&document.hidden){
+    registerWarning();
   }
 });
-
-// 실제 실시간 순위표는 서버 연결 후 구현
-// 정답과 순위는 브라우저만으로 신뢰성 있게
-// 관리할 수 없으므로 공개 코드에 저장하지 않습니다.
-
 </script>
-
 </body>
 </html>
