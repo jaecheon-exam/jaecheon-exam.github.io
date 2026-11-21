@@ -37,10 +37,10 @@ nav{background:#fff;border-bottom:1px solid #ccc;padding:13px max(18px,calc((100
 </style></head><body>
 <nav><b>임재천학 능력 시험</b><div><button onclick="openView('home')">시험 안내</button> <button onclick="openView('rank')">실시간 순위표</button></div></nav>
 <main class="wrap">
-<section id="home" class="screen active"><div class="sheet cover"><div class="center"><div class="small">2026학년도 임재천 4주년 평가 문제지</div><h1 class="title">임재천학 능력 시험</h1></div><hr class="rule"><h3>응시자 유의사항</h3><ol class="instructions"><li>문제지 해당란에는 닉네임을 정확히 적어주세요</li><li>문제는 총 25문항, 듣기영역 4문항, 객관식 10문항, 서술형 11문항 총 25문항입니다</li><li>제한시간은 총 30분 입니다</li><li>문항에 따라 배점이 다릅니다. 문항 옆에 배점이 표시가 되어있고, 총점은 50점입니다.</li><li>출제 범위는 당신이 재첩이라면 맞출 수 있는 범위입니다.</li><li>이 화면을 벗어날 경우 부정행위로 감지가 되어 경고가 주어집니다.</li><li>경고 3회 누적 시 모든 점수는 0점으로 처리됩니다.</li></ol><div class="center"><button class="btn dark" onclick="openView('register')">시험 응시하기</button></div></div></section>
+<section id="home" class="screen active"><div class="sheet cover"><div class="center"><div class="small">2026학년도 임재천 4주년 평가 문제지</div><h1 class="title">임재천학 능력 시험</h1></div><hr class="rule"><h3>응시자 유의사항</h3><ol class="instructions"><li>문제지 해당란에는 닉네임을 정확히 적어주세요</li><li>문제는 총 25문항, 듣기영역 4문항, 객관식 10문항, 서술형 11문항 총 25문항입니다</li><li>제한시간은 총 30분 입니다</li><li>문항에 따라 배점이 다릅니다. 문항 옆에 배점이 표시가 되어있고, 총점은 50점입니다.</li><li>출제 범위는 당신이 재첩이라면 맞출 수 있는 범위입니다.</li><li>이 화면을 벗어날 경우 부정행위로 감지가 되어 경고가 주어집니다.</li><li>경고 3회 누적 시 모든 점수는 0점으로 처리됩니다.</li><li>시험 도중 다른 탭이나 프로그램으로 이동하거나 시험 화면을 벗어난 상태가 5초 이상 지속되면 경고가 1회 누적됩니다. 5초 미만에 돌아오면 경고가 누적되지 않습니다.</li></ol><div class="center"><button class="btn dark" id="entryButton" onclick="openView('register')" disabled>응시 자격 확인 중…</button><p id="entryStatus" class="small" role="status">Firebase 응시 기록 확인 중입니다.</p></div></div></section>
 <section id="register" class="screen"><div class="sheet cover"><div class="center small">2026학년도 임재천 4주년 평가 문제지</div><h2 class="center">응시자 확인</h2><hr class="rule"><p><b>성명</b></p><input id="student" class="input" maxlength="30" placeholder="닉네임을 입력하세요"><p class="small">입력한 성명은 시험 화면과 결과 화면에 표시됩니다.</p><p><label><input type="checkbox" id="agree"> 응시자 유의사항을 확인했습니다.</label></p><button class="btn dark" onclick="startExam()">시험 시작</button></div></section>
 <section id="exam" class="screen"><div class="toolbar row"><span>성명: <b id="studentDisplay"></b></span><span id="clock" aria-live="off">남은 시간 30:00</span><span id="exit">화면 이탈 경고 0 / 3회</span></div><p id="warningMessage" class="warn" role="status" aria-live="polite" style="display:none"></p><div class="exam-scroll"><div class="sheet exam-paper"><div class="paper-heading"><span>2026학년도 임재천 4주년 평가 문제지</span><span>임재천 탐구 영역</span></div><div class="paper-title"><small>제1교시</small><h2>임재천 탐구 영역</h2><small>성명: <b id="paperStudent"></b></small></div><div class="columns"><div class="col" id="left"></div><div class="col" id="right"></div></div><div class="footer-num" id="paperPage">1 / 5</div></div></div><div class="controls"><button class="btn" id="prevButton" onclick="turn(-1)">이전 페이지</button><span id="progress">0 / 25문항 응답</span><button class="btn" id="nextButton" onclick="turn(1)">다음 페이지</button></div><div class="center submit-actions"><button class="btn dark" id="submitButton" type="button" onclick="requestSubmit()">최종 답안 제출</button><div id="submitConfirm" class="submit-confirm" role="group" aria-label="최종 답안 제출 확인"><strong>최종 답안 제출 확인</strong><p id="submitConfirmText">답안을 제출하면 수정할 수 없습니다.</p><button class="btn dark" type="button" onclick="submitExam(false)">제출하고 채점하기</button><button class="btn" type="button" onclick="cancelSubmit()">계속 풀기</button></div></div></section>
-<section id="result" class="screen"><div class="sheet cover"><div class="center small">2026학년도 임재천 4주년 평가 문제지</div><h2 class="center">성적 통지표</h2><hr class="rule"><p>성명: <b id="resultName"></b></p><div class="result-grid"><div><div class="small">총점 / 50점</div><strong id="scoreValue">-</strong></div><div><div class="small">정답 문항 수</div><strong id="rightCount">-</strong></div><div><div class="small">전체 석차</div><strong id="myRank">집계 전</strong></div></div><p id="jaecheopMessage" class="jaecheop-message" aria-live="polite"></p><img class="result-evaluation-image" src="점수별 재첩이 평가표.png" alt="재첩 평가 안내: 10~19점 재첩아 곤듀에게 관심 좀 가져, 20~29점 재첩아 곤듀 방송만 보는 거 아녔어, 30~39점 이제 막 곤듀 방송을 보기 시작한 유입 재첩, 40~49점 당신은 열혈 재첩이, 50점 만점 명예 재첩" loading="lazy" decoding="async"><p id="elapsedResult" class="small"></p><p class="small" id="resultNote"></p><div class="tabs"><button class="btn" onclick="openView('review')">정답·오답 및 해설 보기</button><button class="btn dark" onclick="openView('rank')">실시간 순위표 보기</button></div></div></section>
+<section id="result" class="screen"><div class="sheet cover"><div class="center small">2026학년도 임재천 4주년 평가 문제지</div><h2 class="center">성적 통지표</h2><hr class="rule"><p>성명: <b id="resultName"></b></p><div class="result-grid"><div><div class="small">총점 / 50점</div><strong id="scoreValue">-</strong></div><div><div class="small">정답 문항 수</div><strong id="rightCount">-</strong></div><div><div class="small">전체 석차</div><strong id="myRank">집계 전</strong></div></div><p id="jaecheopMessage" class="jaecheop-message" aria-live="polite"></p><img class="result-evaluation-image" src="점수별-재첩이-평가표.webp" alt="재첩 평가 안내: 10~19점 재첩아 곤듀에게 관심 좀 가져, 20~29점 재첩아 곤듀 방송만 보는 거 아녔어, 30~39점 이제 막 곤듀 방송을 보기 시작한 유입 재첩, 40~49점 당신은 열혈 재첩이, 50점 만점 명예 재첩" loading="lazy" decoding="async"><p id="elapsedResult" class="small"></p><p class="small" id="resultNote"></p><div class="tabs"><button class="btn" onclick="openView('review')">정답·오답 및 해설 보기</button><button class="btn dark" onclick="openView('rank')">실시간 순위표 보기</button></div></div></section>
 <section id="review" class="screen"><div class="sheet"><h2>정답 및 해설</h2><div class="tabs"><button class="btn" onclick="renderReview('all')">전체 문항</button><button class="btn" onclick="renderReview('correct')">정답 문항</button><button class="btn" onclick="renderReview('wrong')">오답 문항</button><button class="btn" onclick="renderReview('pending')">미채점 문항</button></div><div id="reviews"></div><button class="btn" onclick="openView('result')">성적 통지표로</button></div></section>
 <section id="rank" class="screen"><div class="sheet cover">
   <h2>임재천학 능력 시험 전체 석차</h2><hr class="rule">
@@ -70,9 +70,57 @@ const SECTION_NOTICES = {
 };
 let studentName='',page=0,answers={},started=false,submitted=false,exits=0,graded=[];
 let deadline=0, timerId=null, examStartedAt=0;
+// 한 번의 연속된 화면 이탈은 5초 이상일 때만 경고 1회 부여
+const AWAY_LIMIT_MS=5000;
+let awaySince=null, awayTimer=null, awayCounted=false;
+function clearAwayState(){
+  if(awayTimer!==null)clearTimeout(awayTimer);
+  awayTimer=null;awaySince=null;awayCounted=false;
+}
+function creditAwayIfDue(){
+  if(!started||submitted||awaySince===null||awayCounted)return;
+  if(Date.now()-awaySince>=AWAY_LIMIT_MS){
+    awayCounted=true;
+    registerWarning();
+  }
+}
+function startAway(){
+  if(!started||submitted||awaySince!==null)return;
+  awaySince=Date.now();awayCounted=false;
+  awayTimer=setTimeout(()=>{awayTimer=null;creditAwayIfDue()},AWAY_LIMIT_MS);
+}
+function stopAway(){
+  creditAwayIfDue();
+  clearAwayState();
+}
+function isOutsideExam(){
+  return !document.getElementById('exam').classList.contains('active');
+}
+function refreshAwayTracking(){
+  if(!started||submitted){clearAwayState();return;}
+  if(document.hidden||!document.hasFocus()||isOutsideExam())startAway();
+  else stopAway();
+}
 const $ = id => document.getElementById(id);
-function openView(id){if(started&&!submitted&&id!=='exam'&&id!=='register'){if(!confirm('시험 화면을 벗어나시겠습니까? 이탈 경고가 누적됩니다.'))return;registerWarning()}document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0)}
-function startExam(){const name=$('student').value.trim();if(!name)return alert('닉네임을 입력해주세요.');if(!$('agree').checked)return alert('유의사항을 확인해주세요.');studentName=name;page=0;answers={};exits=0;submitted=false;started=true;cancelSubmit();$('studentDisplay').textContent=name;$('paperStudent').textContent=name;$('warningMessage').style.display='none';updateExit();renderPaper();examStartedAt=Date.now();
+async function examEntryAllowed(){
+  if(submitted){alert('이미 최종 답안을 제출했습니다. 재시험은 불가능합니다.');return false;}
+  if(!window.examAccess){alert('Firebase 연결을 확인하고 다시 시도해주세요.');return false;}
+  try{
+    const hasSubmitted=await window.examAccess.check();
+    if(hasSubmitted){alert('이미 시험을 제출한 계정입니다. 재시험은 불가능합니다.');return false;}
+    return true;
+  }catch(error){console.error('응시 기록 확인 실패',error);alert('응시 기록을 확인할 수 없습니다. 인터넷 연결을 확인해주세요.');return false;}
+}
+async function openView(id){
+  if(id==='register' && !(await examEntryAllowed()))return;
+  if(started&&!submitted&&id!=='exam'&&id!=='register'){
+    if(!confirm('시험 화면을 벗어나시겠습니까? 5초 이상 이탈하면 경고가 누적됩니다.'))return;
+  }
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+  $(id).classList.add('active');window.scrollTo(0,0);
+  refreshAwayTracking();
+}
+async function startExam(){const name=$('student').value.trim();if(!name)return alert('닉네임을 입력해주세요.');if(!$('agree').checked)return alert('유의사항을 확인해주세요.');if(!(await examEntryAllowed()))return;clearAwayState();studentName=name;page=0;answers={};exits=0;submitted=false;started=true;cancelSubmit();$('studentDisplay').textContent=name;$('paperStudent').textContent=name;$('warningMessage').style.display='none';updateExit();renderPaper();examStartedAt=Date.now();
   deadline=examStartedAt+EXAM_MINUTES*60*1000;clearInterval(timerId);updateClock();timerId=setInterval(updateClock,1000);openView('exam')}
 function updateClock(){if(!started||submitted)return;const remaining=Math.max(0,Math.ceil((deadline-Date.now())/1000));$('clock').textContent='남은 시간 '+String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');if(remaining===0)submitExam(true)}
 function makeQuestion(q){const el=document.createElement('section');el.className='question';el.dataset.questionId=String(q.id);const h=document.createElement('h3');h.textContent=q.id+'. '+q.title+' ['+q.points+'점]';el.append(h);if(q.unfinished){const x=document.createElement('p');x.className='pending';x.textContent='※ 원본 문제집에서 내용이 미완성인 문항';el.append(x)}if(q.type==='audio'){const audio=document.createElement('audio');audio.className='audio';audio.controls=true;audio.preload='none';audio.src=q.audio;el.append(audio)}if(q.type==='choice'){q.options.forEach((s,i)=>{const label=document.createElement('label');label.className='opt';const radio=document.createElement('input');radio.type='radio';radio.name='q'+q.id;radio.checked=answers[q.id]===String(i);radio.addEventListener('change',()=>{answers[q.id]=String(i);updateProgress()});const t=document.createElement('span');t.textContent=['①','②','③','④','⑤'][i]+' '+s;label.append(radio,t);el.append(label)})}else{const area=document.createElement(q.type==='audio'?'input':'textarea');if(q.type==='audio'){area.type='text';area.className='audio-answer';area.placeholder='정답을 입력하세요';area.setAttribute('aria-label',q.id+'번 듣기평가 답안')}else{area.className='answer';area.placeholder='답안을 직접 작성하세요'}area.value=answers[q.id]||'';area.addEventListener('input',()=>{answers[q.id]=area.value;updateProgress()});el.append(area)}return el}
@@ -134,6 +182,7 @@ function requestSubmit(){
 function cancelSubmit(){$('submitConfirm').classList.remove('visible')}
 function submitExam(auto=false){
   if(submitted)return;
+  creditAwayIfDue();
   cancelSubmit();
   // 제출과 채점을 분리하여 해설 렌더링 오류가 나더라도 성적표가 열리도록 처리
   let score=0, right=0;
@@ -162,12 +211,13 @@ function submitExam(auto=false){
     $('elapsedResult').textContent='풀이 시간: '+fmtElapsed(elapsedSeconds);
     submitted=true;
     started=false;
+    clearAwayState();
     clearInterval(timerId);
     // 모든 필수 결과를 표시한 후 이동
     openView('result');
     if(window.examLeaderboard){
       window.examLeaderboard.save({nickname:studentName,score:score,correct:right,elapsedSeconds:elapsedSeconds,warnings:exits})
-        .then(()=>{$('resultNote').textContent += ' · 순위표 저장 완료';})
+        .then(()=>{$('resultNote').textContent += ' · 순위표 저장 완료';window.examAccess?.lockUI();})
         .catch(e=>{console.warn('성적 저장 실패',e);$('resultNote').textContent += ' · 순위표 저장 실패: Firebase 설정을 확인하세요.';});
     }else{
       $('resultNote').textContent += ' · 순위표 연결 준비 중';
@@ -179,7 +229,9 @@ function submitExam(auto=false){
   }
 }
 function renderReview(filter='all'){const root=$('reviews');root.replaceChildren();graded.filter(g=>filter==='all'||filter==='pending'&&!g.eligible||filter==='correct'&&g.correct===true||filter==='wrong'&&g.eligible&&g.correct===false).forEach(g=>{const {q,input,correct,eligible}=g;const div=document.createElement('div');div.className='review';const head=document.createElement('h3');head.textContent=q.id+'. '+q.title+' ['+q.points+'점]';const status=document.createElement('b');status.className=eligible?(correct?'good':'bad'):'skip';status.textContent=eligible?(correct?'정답':'오답'):'미채점';const mine=document.createElement('p');mine.textContent='제출 답안: '+(String(input).trim()?q.type==='choice'?q.options[Number(input)]:input:'미응답');const key=document.createElement('p');key.textContent='정답: '+(eligible?(q.type==='choice'?q.options[q.answer]:q.answer):'정답 기준 미입력');div.append(head,status,mine,key);if(q.explain){const explain=document.createElement('p');explain.textContent='해설: '+q.explain;div.append(explain)}root.append(div)});if(!root.children.length)root.textContent='해당하는 문항이 없습니다.'}
-document.addEventListener('visibilitychange',()=>{if(started&&!submitted&&document.hidden)registerWarning()});
+document.addEventListener('visibilitychange',refreshAwayTracking);
+window.addEventListener('blur',refreshAwayTracking);
+window.addEventListener('focus',refreshAwayTracking);
 
 // Enter: move to the next question field. Shift+Enter allows line breaks in essays.
 // Final question: focus the submit button; never submit answers automatically.
@@ -218,7 +270,7 @@ document.getElementById('exam').addEventListener('keydown', function(event) {
 // Firebase 연동 (GitHub Pages에서도 별도 빌드 없이 동작)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, collection, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, setDoc, collection, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js';
 
 // Firebase 콘솔의 웹 앱 설정. 이 값은 비밀번호가 아니며, 접근 권한은 Firestore 규칙으로 제한함.
 const firebaseConfig={
@@ -247,19 +299,42 @@ try{
       catch(e){reject(e);}
     },reject);
   });
+  const entryButton=document.getElementById('entryButton');
+  const entryStatus=document.getElementById('entryStatus');
+  function lockUI(){
+    entryButton.disabled=true;
+    entryButton.textContent='이미 응시 완료';
+    entryStatus.textContent='이 브라우저의 익명 계정에 제출된 성적이 있습니다. 재시험은 불가능합니다.';
+  }
+  function unlockUI(){
+    entryButton.disabled=false;
+    entryButton.textContent='시험 응시하기';
+    entryStatus.textContent='아직 제출된 기록이 없습니다.';
+  }
+  async function checkSubmitted(){
+    const user=await ready;
+    if(!user)throw Error('로그인 실패');
+    const existing=await getDoc(doc(db,'scores',user.uid));
+    if(existing.exists())lockUI();else unlockUI();
+    return existing.exists();
+  }
+  window.examAccess={check:checkSubmitted,lockUI};
   window.examLeaderboard={
     save:async ({nickname,score,correct,elapsedSeconds,warnings})=>{
       const user=await ready;
       if(!user)throw Error('로그인 실패');
-      // 브라우저별 첫 제출만 저장. 다른 브라우저 재응시까지 막을 수는 없음.
+      if(await checkSubmitted())throw Error('이미 제출된 성적이 있습니다.');
+      // 동일 Firebase 익명 계정은 Firestore create-only 규칙으로 재제출 불가.
       await setDoc(doc(db,'scores',user.uid),{
         uid:user.uid,
         nickname:nickname.slice(0,30),
         score,correct,elapsedSeconds,warnings,
         submittedAt:serverTimestamp()
       });
+      lockUI();
     }
   };
+  await checkSubmitted();
   const user=await ready;
   status.textContent='실시간 순위표 연결 완료 · 성적 등록 시 자동 갱신됩니다.';
   onSnapshot(collection(db,'scores'),snapshot=>{
@@ -294,6 +369,8 @@ try{
 }catch(err){
   console.error('Firebase 초기화 실패',err);
   status.textContent='Firebase 연결 실패 · 설정과 익명 로그인 사용 여부를 확인하세요.';
+  const entryStatus=document.getElementById('entryStatus');
+  if(entryStatus)entryStatus.textContent='연결 오류로 응시 가능 여부를 확인할 수 없습니다.';
 }
 </script>
 </body></html>
