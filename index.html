@@ -138,7 +138,7 @@ function revealHint(id){
   if(!started||submitted||!PAGES[page].includes(id))return;
   const used=hintUsedPerPage[page];
   if(!used.has(id)){
-    if(false)return;
+    if(used.size>=3)return;
     used.add(id);
   }
   updateHintCount();renderHints();
